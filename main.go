@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-const sockAddrDefault = "/tmp/klystron.sock"
+const sockAddrDefault = "/var/run/klystron/klystron.sock"
 const sockBufferSize64 = 212992
 const sockBufferSize32 = 163840
 
@@ -128,6 +128,7 @@ func NewServer() Server {
 	server.SocketAddr = sockAddrDefault
 	server.SocketBufferSize = sockBufferSize64
 	os.Remove(server.SocketAddr)
+	log.Printf("running klystron on %s", server.SocketAddr)
 	return server
 }
 

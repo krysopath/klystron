@@ -1,0 +1,29 @@
+{
+    "directory": "/var/tmp/klystron",
+    "outputs": [
+        {
+            "orientation": "P",
+            "unit": "mm",
+            "format": "Letter",
+            "font": {
+                "fontDir": "",
+                "name": "Times",
+                "style": "B",
+                "size": 28
+            }
+        },
+        {
+            "orientation": "L",
+            "unit": "mm",
+            "format": "Letter",
+            "font": {
+                "fontDir": "",
+                "name": "Times",
+                "style": "B",
+                "size": 28
+            }
+        }
+    ]
+}
+
+
