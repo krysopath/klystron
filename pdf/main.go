@@ -1,4 +1,4 @@
-package main
+package pdf
 
 import (
 	"encoding/csv"
@@ -9,7 +9,7 @@ import (
 	"github.com/jung-kurt/gofpdf"
 )
 
-func main() {
+func CreateCsv() {
 	data := loadCSV(path())
 	pdf := newReport()
 	pdf = header(pdf, data[0])
