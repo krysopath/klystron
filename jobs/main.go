@@ -42,7 +42,7 @@ func JobUnmarshal(data []byte) structs.Job {
 	var job structs.Job
 	err := json.Unmarshal(data, &job)
 	check(err)
-	if validateJob(&job) {
+	if ValidateJob(&job) {
 		return job
 	} else {
 		panic("job did not validate")

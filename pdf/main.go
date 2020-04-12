@@ -9,8 +9,8 @@ import (
 	"github.com/jung-kurt/gofpdf"
 )
 
-func CreateCsv() {
-	data := loadCSV(path())
+func CreateCsv(csvPath string) {
+	data := loadCSV(csvPath)
 	pdf := newReport()
 	pdf = header(pdf, data[0])
 	pdf = table(pdf, data[1:])
@@ -20,10 +20,10 @@ func CreateCsv() {
 		log.Fatalf("Failed creating PDF report: %s\n", pdf.Error())
 	}
 
-	err := savePDF(pdf)
-	if err != nil {
-		log.Fatalf("Cannot save PDF: %s|n", err)
-	}
+	//err := savePDF(pdf)
+	//if err != nil {
+	//	log.Fatalf("Cannot save PDF: %s|n", err)
+	//}
 }
 
 func loadCSV(path string) [][]string {
@@ -38,13 +38,6 @@ func loadCSV(path string) [][]string {
 		log.Fatalln("Cannot read CSV data:", err.Error())
 	}
 	return rows
-}
-
-func path() string {
-	if len(os.Args) < 2 {
-		return "ordersReport.csv"
-	}
-	return os.Args[1]
 }
 
 func newReport() *gofpdf.Fpdf {
@@ -88,7 +81,7 @@ func table(pdf *gofpdf.Fpdf, tbl [][]string) *gofpdf.Fpdf {
 
 func image(pdf *gofpdf.Fpdf) *gofpdf.Fpdf {
 	pdf.ImageOptions(
-		"stats.png", 225, 10, 25, 25, false,
+		"examples/csv/stats.png", 225, 10, 25, 25, false,
 		gofpdf.ImageOptions{ImageType: "PNG", ReadDpi: true}, 0, "")
 	return pdf
 }
