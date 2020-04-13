@@ -1,5 +1,7 @@
 {
+    "name": "csv-report",
     "directory": "/var/tmp/klystron",
+    "sources": [],
     "outputs": [
         {
             "orientation": "P",

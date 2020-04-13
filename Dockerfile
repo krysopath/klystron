@@ -29,9 +29,11 @@ RUN go build \
   -a \
   -installsuffix cgo \
   -ldflags="-w -s" \
-  -o /bin/klystron
+  -o /bin/klystron \
+  main.go
 WORKDIR /var/run/klystron
 RUN chown -R $UID:$GID /var/run/klystron
+RUN chmod +x /bin/klystron
 
 FROM scratch as prod
 COPY --from=build /usr/share/zoneinfo /usr/share/zoneinfo
@@ -55,6 +57,7 @@ COPY --from=prod /etc/passwd /etc/passwd
 COPY --from=prod /etc/group /etc/group
 COPY --from=prod /bin/klystron /bin/klystron
 COPY --from=build /var/run/klystron /var/run/klystron
+RUN chmod +x /bin/klystron
 VOLUME /var/run/klystron
 RUN apk add --no-cache jq parallel
 EXPOSE 12321

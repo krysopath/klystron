@@ -39,7 +39,7 @@ func (c *Client) sendMessage(message []byte) {
 	if err != nil {
 		log.Printf("Write error: %s", err)
 	}
-	log.Printf("Wrote %d bytes", count)
+	log.Printf("Wrote %s bytes", utils.ByteCountSI(int64(count)))
 }
 
 func (c *Client) inputChannel(files []string) []*bufio.Reader {

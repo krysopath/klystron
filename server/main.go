@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,6 +13,12 @@ import (
 	"github.com/krysopath/klystron/structs"
 	"github.com/krysopath/klystron/utils"
 )
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 type Server struct {
 	//Logger     *log.Logger
@@ -44,10 +51,17 @@ func handleSources(job *structs.Job) {
 		//data := []byte(source.Data)
 		dataDecoded, _ := base64.StdEncoding.DecodeString(source.Data)
 		//data := utils.GUnzipData([]byte(source.Data))
-		var filePath string = fmt.Sprintf("%s/%s", structs.JobSpoolDir, source.Hash)
+		var filePath string = fmt.Sprintf(
+			"%s/%s",
+			structs.JobSpoolDir,
+			source.Hash,
+		)
+
 		if !utils.FileExists(filePath) {
 			ioutil.WriteFile(filePath, dataDecoded, 0600)
-			log.Printf("Wrote source: %s@%s", source.Path, source.Hash)
+			log.Printf("Wrote source: %s@%s",
+				source.Path,
+				source.Hash)
 		}
 	}
 }
@@ -57,16 +71,19 @@ func handleJob(job *structs.Job) {
 	log.Printf("Using Spool Directory: %s", structs.JobSpoolDir)
 	log.Printf("Outputs: %+v", job.Outputs)
 	handleSources(job)
-
+	//pdf.CreateCsv("examples/csv/addresses.csv")
 }
 
 func handleMessage(messageBytes *[]byte) {
-	//message := utils.JSONUnmarshal(messageBytes).(map[string]interface{})
-	message := utils.JSONUnmarshal(messageBytes).(structs.Message)
-	fmt.Printf("%+v", message)
-	handleJob(&message.Content)
-	//pdf.CreateCsv("examples/csv/addresses.csv")
+	var message structs.Message
+	var msgSize string = utils.ByteCountSI(int64(len(*messageBytes)))
 
+	err := json.Unmarshal(*messageBytes, &message)
+	check(err)
+	log.Printf("Parsed %s", msgSize)
+	log.Printf("Parsed messages SHA256:%s", message.Hash)
+
+	handleJob(&message.Content)
 }
 
 func (s *Server) handleConn(c net.Conn) {

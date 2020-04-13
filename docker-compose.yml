@@ -3,13 +3,14 @@ services:
   klystron:
     image: klystron
     read_only: false
+    entrypoint: sleep 999999
     build:
       network: host
       context: .
       dockerfile: Dockerfile
       target: dev
     volumes:
-      - ./klystron:/var/run/klystron:rw
+      - ./klystron-data:/var/run/klystron:rw
 
   klystron-client:
     image: klystron
@@ -23,7 +24,7 @@ services:
       target: dev
     command: '/var/run/klystron/examples/example.sh'
     volumes:
-      - ./klystron/klystron.sock:/var/run/klystron/klystron.sock:rw
+      - ./klystron-data/klystron.sock:/var/run/klystron/klystron.sock:rw
       - ./examples:/var/run/klystron/examples:rw
 
 volumes:
